@@ -80,8 +80,11 @@ class ValueModifierMixin:
         _text = self.fmt.format(value=self._value * other)  # type: ignore
         return ModifierMixin.from_text(_text)
 
-    def __radd__(self, other: "ValueModifierMixin") -> "ModifierMixin":
-        _text = self.fmt.format(value=other._value + self._value)  # type: ignore
+    def __radd__(self, other: Union["ValueModifierMixin", int, float]) -> "ModifierMixin":
+        if isinstance(other, ValueModifierMixin):
+            assert self == other, f"modifier mismatch"
+            other = other._value
+        _text = self.fmt.format(value=other + self._value)  # type: ignore
         return ModifierMixin.from_text(_text)
 
     def __rmul__(self, other: Union["ValueModifierMixin", int, float]) -> "ModifierMixin":
