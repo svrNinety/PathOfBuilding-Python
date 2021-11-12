@@ -39,7 +39,7 @@ class DynamicValueModifierEnum(Enum):
         identifier="more_spell_damage_%_per_power_charge",
         regexp=f"^{_INT}% more Spell Damage per Power Charge$",
         fmt="{value:d}% more Spell Damage per Power Charge",
-        scaler=lambda: 5
+        scaler=lambda: 5,
     )
 
 
@@ -48,5 +48,5 @@ class ConditionalValueModifierEnum(Enum):
         identifier="increased_spell_damage_while_holding_a_shield",
         regexp=f"^{_INT}% increased Spell Damage while holding a Shield$",
         fmt="{value:d}% increased Spell Damage while holding a Shield",
-        predicates=[lambda: True],  # functions that return true
+        predicates=[lambda: True],
     )
