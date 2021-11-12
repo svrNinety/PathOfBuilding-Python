@@ -3,8 +3,17 @@ from enum import Enum
 from typing import Any, Type
 
 import parse
-from modifier_enum import ConditionalValueModifierEnum, ValueModifierEnum, DynamicValueModifierEnum
-from modifier_mixin import ConditionalModifierMixin, ModifierMixin, ValueModifierMixin, DynamicValueModifierMixin
+from modifier_enum import (
+    ConditionalValueModifierEnum,
+    DynamicValueModifierEnum,
+    ValueModifierEnum,
+)
+from modifier_mixin import (
+    ConditionalModifierMixin,
+    DynamicValueModifierMixin,
+    ModifierMixin,
+    ValueModifierMixin,
+)
 
 
 class Modifier(ModifierMixin):
@@ -25,7 +34,8 @@ class DynamicValueModifier(ModifierMixin, DynamicValueModifierMixin):
 
 def _infer_modifier_type_from_text(modifier_text: str) -> tuple[Type[ModifierMixin], Type[Enum], Any]:
     for _cls, _enum in zip(
-        [ValueModifier, DynamicValueModifier, ConditionalValueModifier], [ValueModifierEnum, DynamicValueModifierEnum, ConditionalValueModifierEnum]
+        [ValueModifier, DynamicValueModifier, ConditionalValueModifier],
+        [ValueModifierEnum, DynamicValueModifierEnum, ConditionalValueModifierEnum],
     ):
         for _member in _enum:
             res = re.search(pattern=_member.value["regexp"], string=modifier_text)
@@ -56,3 +66,5 @@ if __name__ == "__main__":
     print(m.text)
     print(m2.text)
     print(m3.text)
+    s = sum([m, m2, m3])
+    print(s.text)
