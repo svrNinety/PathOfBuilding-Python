@@ -1,7 +1,6 @@
 import re
 from enum import Enum
 from functools import cached_property
-from numbers import Integral, Real
 from typing import Any, Callable, Iterable, Type, Union
 
 import parse
@@ -67,9 +66,9 @@ class Modifier:
 
 
 class ConditionalModifierMixin:
-    def __init__(self, predicates, *args, **kwargs):
+    def __init__(self, predicates: Iterable[Callable[[], bool]], *args, **kwargs):
         self._predicates = predicates
-        super(ConditionalModifierMixin, self).__init__(*args, **kwargs)
+        super(ConditionalModifierMixin, self).__init__(*args, **kwargs)  # type: ignore
 
     @property
     def predicates(self) -> Iterable[Callable[[], bool]]:
@@ -81,45 +80,45 @@ class ConditionalModifierMixin:
 
 
 class ValueModifierMixin:
-    def __init__(self, value, *args, **kwargs):
-        self._value = value
-        super(ValueModifierMixin, self).__init__(*args, **kwargs)
+    def __init__(self, value: Union[int, float], *args, **kwargs):
+        self._value: Union[int, float] = value
+        super(ValueModifierMixin, self).__init__(*args, **kwargs)  # type: ignore
 
     @property
-    def value(self):
+    def value(self) -> Union[int, float]:
         return self._value
 
     @cached_property
     def text(self) -> str:
         return self.fmt.format(value=self.value)  # type: ignore
 
-    def __add__(self, other: "ValueModifierMixin") -> "Modifier":
+    def __add__(self, other: "ValueModifierMixin") -> "ValueModifierMixin":
         assert self == other, f"modifier mismatch"
         _text = self.fmt.format(value=self.value + other.value)  # type: ignore
-        return Modifier.from_text(_text)
+        return ValueModifier.from_text(_text)
 
-    def __sub__(self, other: "ValueModifierMixin") -> "Modifier":
+    def __sub__(self, other: "ValueModifierMixin") -> "ValueModifierMixin":
         assert self == other, f"modifier mismatch"
         _text = self.fmt.format(value=self.value - other.value)  # type: ignore
-        return Modifier.from_text(_text)
+        return ValueModifier.from_text(_text)
 
-    def __mul__(self, other: Union["ValueModifierMixin", Integral, Real]) -> "Modifier":
+    def __mul__(self, other: Union["ValueModifierMixin", int, float]) -> "ValueModifier":
         if isinstance(other, ValueModifierMixin):
             assert self == other, f"modifier mismatch"
             other = other.value
         _text = self.fmt.format(value=self.value * other)  # type: ignore
-        return Modifier.from_text(_text)
+        return ValueModifier.from_text(_text)
 
-    def __radd__(self, other):
+    def __radd__(self, other) -> "ValueModifier":
         _text = self.fmt.format(value=other.value + self.value)  # type: ignore
-        return Modifier.from_text(_text)
+        return ValueModifier.from_text(_text)
 
-    def __rmul__(self, other: Union["ValueModifierMixin", Integral, Real]) -> "Modifier":
+    def __rmul__(self, other: Union["ValueModifierMixin", int, float]) -> "ValueModifierMixin":
         if isinstance(other, ValueModifierMixin):
             assert self == other, f"modifier mismatch"
             other = other.value
         _text = self.fmt.format(value=other * self.value)  # type: ignore
-        return Modifier.from_text(_text)
+        return ValueModifier.from_text(_text)
 
     def __iadd__(self, other: "ValueModifierMixin") -> "ValueModifierMixin":
         assert self == other, f"modifier mismatch"
@@ -131,7 +130,7 @@ class ValueModifierMixin:
         self._value -= other.value
         return self
 
-    def __imul__(self, other: Union["ValueModifierMixin", Integral, Real]) -> "ValueModifierMixin":
+    def __imul__(self, other: Union["ValueModifierMixin", int, float]) -> "ValueModifierMixin":
         if isinstance(other, ValueModifierMixin):
             assert self == other, f"modifier mismatch"
             other = other.value
