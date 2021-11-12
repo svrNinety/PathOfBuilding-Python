@@ -46,14 +46,14 @@ def _instantiate_modifier_instance_from_text(modifier_text: str) -> ModifierMixi
 
 
 if __name__ == "__main__":
-    a = ModifierMixin.from_text("+20 to Strength")
-    b = ModifierMixin.from_text("+15 to Strength")
+    a = Modifier.from_text("+20 to Strength")
+    b = Modifier.from_text("+15 to Strength")
     print(a)
     print(b)
     print(a + b)
     print(a - b)
     print(a * 3)
     print(4 * a)
-    m = ModifierMixin.from_text("15% increased Spell Damage while holding a Shield")
+    m = Modifier.from_text("15% increased Spell Damage while holding a Shield")
     print(m)
     print(m * 3)
