@@ -44,13 +44,9 @@ def _infer_modifier_type_from_text(modifier_text: str) -> tuple[Type[ModifierMix
     raise RuntimeError(f"Modifier '{modifier_text}' couldn't be matched")
 
 
-def _parse_modifier_parameters_from_text(fmt: str, modifier_text: str) -> dict[str, Any]:
-    return parse.parse(format=fmt, string=modifier_text).named
-
-
 def _instantiate_modifier_instance_from_text(modifier_text: str) -> ModifierMixin:
     cls, modifier_type, type_requirements = _infer_modifier_type_from_text(modifier_text=modifier_text)
-    params = _parse_modifier_parameters_from_text(fmt=type_requirements["fmt"], modifier_text=modifier_text)
+    params = parse.parse(format=type_requirements["fmt"], string=modifier_text).named
     if modifier_type == ValueModifierEnum:
         cls = ValueModifier
     elif modifier_type == ConditionalValueModifierEnum:
