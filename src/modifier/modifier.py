@@ -1,14 +1,17 @@
 import re
 from enum import Enum
 from functools import cached_property
-from typing import Iterable, Callable, Any, Union, Type
 from numbers import Integral, Real
+from typing import Any, Callable, Iterable, Type, Union
+
 import parse
-from modifier_enum import ValueModifierEnum, ConditionalValueModifierEnum
+from modifier_enum import ConditionalValueModifierEnum, ValueModifierEnum
 
 
 def _infer_modifier_type_from_text(modifier_text: str) -> tuple[Type["Modifier"], Type[Enum], Any]:
-    for _cls, _enum in zip([ValueModifier, ConditionalValueModifier], [ValueModifierEnum, ConditionalValueModifierEnum]):
+    for _cls, _enum in zip(
+        [ValueModifier, ConditionalValueModifier], [ValueModifierEnum, ConditionalValueModifierEnum]
+    ):
         for _member in _enum:
             res = re.search(pattern=_member.value["regexp"], string=modifier_text)
             if res:
@@ -22,7 +25,7 @@ def _parse_modifier_parameters_from_text(fmt: str, modifier_text: str) -> dict[s
 
 def _instantiate_modifier_instance_from_text(modifier_text: str) -> "Modifier":
     cls, modifier_type, type_requirements = _infer_modifier_type_from_text(modifier_text=modifier_text)
-    params = _parse_modifier_parameters_from_text(fmt=type_requirements['fmt'], modifier_text=modifier_text)
+    params = _parse_modifier_parameters_from_text(fmt=type_requirements["fmt"], modifier_text=modifier_text)
     if modifier_type == ValueModifierEnum:
         cls = ValueModifier
     elif modifier_type == ConditionalValueModifierEnum:
@@ -144,7 +147,7 @@ class ConditionalValueModifier(Modifier, ConditionalModifierMixin, ValueModifier
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     a = Modifier.from_text("+20 to Strength")
     b = Modifier.from_text("+15 to Strength")
     print(a)

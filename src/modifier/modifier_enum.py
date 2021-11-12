@@ -36,5 +36,5 @@ class ConditionalValueModifierEnum(Enum):
         identifier="increased_spell_damage_while_holding_a_shield",
         regexp="^[1-9]\d*% increased Spell Damage while holding a Shield$",
         fmt="{value:d}% increased Spell Damage while holding a Shield",
-        predicates=[lambda: True]
+        predicates=[lambda: True],
     )
