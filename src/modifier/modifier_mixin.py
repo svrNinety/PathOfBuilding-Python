@@ -38,7 +38,7 @@ class ModifierMixin:
 
 class ConditionalModifierMixin:
     def __init__(self, predicates: Iterable[Callable[[], bool]], *args, **kwargs):
-        self._predicates = predicates
+        self._predicates: Iterable[Callable[[], bool]] = predicates
         super(ConditionalModifierMixin, self).__init__(*args, **kwargs)  # type: ignore
 
     @property
