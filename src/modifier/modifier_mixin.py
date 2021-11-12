@@ -2,16 +2,17 @@ from functools import cached_property
 from typing import Callable, Iterable, Union
 
 
-class Modifier:
+class ModifierMixin:
     def __init__(self, identifier: str, regexp: str, fmt: str, *args, **kwargs):
         self._identifier: str = identifier
         self._regexp: str = regexp
         self._fmt: str = fmt
-        super(Modifier, self).__init__(*args, **kwargs)  # type: ignore
+        super(ModifierMixin, self).__init__(*args, **kwargs)  # type: ignore
 
     @classmethod
-    def from_text(cls, modifier_text: str) -> "Modifier":
+    def from_text(cls, modifier_text: str) -> "ModifierMixin":
         from modifier import _instantiate_modifier_instance_from_text
+
         return _instantiate_modifier_instance_from_text(modifier_text=modifier_text)
 
     @property
@@ -30,7 +31,7 @@ class Modifier:
         return f"<{self.__class__.__name__}({self.__dict__!r})"
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, Modifier):
+        if isinstance(other, ModifierMixin):
             return self._identifier == other._identifier
         return False
 
@@ -62,33 +63,33 @@ class ValueModifierMixin:
     def text(self) -> str:
         return self.fmt.format(value=self.value)  # type: ignore
 
-    def __add__(self, other: "ValueModifierMixin") -> "Modifier":
+    def __add__(self, other: "ValueModifierMixin") -> "ModifierMixin":
         assert self == other, f"modifier mismatch"
         _text = self.fmt.format(value=self.value + other.value)  # type: ignore
-        return Modifier.from_text(_text)
+        return ModifierMixin.from_text(_text)
 
-    def __sub__(self, other: "ValueModifierMixin") -> "Modifier":
+    def __sub__(self, other: "ValueModifierMixin") -> "ModifierMixin":
         assert self == other, f"modifier mismatch"
         _text = self.fmt.format(value=self.value - other.value)  # type: ignore
-        return Modifier.from_text(_text)
+        return ModifierMixin.from_text(_text)
 
-    def __mul__(self, other: Union["ValueModifierMixin", int, float]) -> "Modifier":
+    def __mul__(self, other: Union["ValueModifierMixin", int, float]) -> "ModifierMixin":
         if isinstance(other, ValueModifierMixin):
             assert self == other, f"modifier mismatch"
             other = other.value
         _text = self.fmt.format(value=self.value * other)  # type: ignore
-        return Modifier.from_text(_text)
+        return ModifierMixin.from_text(_text)
 
-    def __radd__(self, other) -> "Modifier":
+    def __radd__(self, other) -> "ModifierMixin":
         _text = self.fmt.format(value=other.value + self.value)  # type: ignore
-        return Modifier.from_text(_text)
+        return ModifierMixin.from_text(_text)
 
-    def __rmul__(self, other: Union["ValueModifierMixin", int, float]) -> "Modifier":
+    def __rmul__(self, other: Union["ValueModifierMixin", int, float]) -> "ModifierMixin":
         if isinstance(other, ValueModifierMixin):
             assert self == other, f"modifier mismatch"
             other = other.value
         _text = self.fmt.format(value=other * self.value)  # type: ignore
-        return Modifier.from_text(_text)
+        return ModifierMixin.from_text(_text)
 
     def __iadd__(self, other: "ValueModifierMixin") -> "ValueModifierMixin":
         assert self == other, f"modifier mismatch"
@@ -106,4 +107,3 @@ class ValueModifierMixin:
             other = other.value
         self._value *= other
         return self
-
