@@ -45,7 +45,7 @@ class ConditionalModifierMixin:
     def predicates(self) -> Iterable[Callable[[], bool]]:
         return self._predicates
 
-    @cached_property
+    @property
     def text(self) -> str:
         return self.fmt.format()  # type: ignore
 
@@ -59,9 +59,9 @@ class ValueModifierMixin:
     def value(self) -> Union[int, float]:
         return self._value
 
-    @cached_property
+    @property
     def text(self) -> str:
-        return self.fmt.format(value=self._value)  # type: ignore
+        return self.fmt.format(value=self.value)  # type: ignore
 
     def __add__(self, other: "ValueModifierMixin") -> "ModifierMixin":
         assert self == other, f"modifier mismatch"
@@ -107,3 +107,13 @@ class ValueModifierMixin:
             other = other._value
         self._value *= other
         return self
+
+
+class DynamicValueModifierMixin(ValueModifierMixin):
+    def __init__(self, scaler: Callable[[], Union[float, int]], *args, **kwargs):
+        self._scaler: Callable[[], Union[float, int]] = scaler
+        super(DynamicValueModifierMixin, self).__init__(*args, **kwargs)
+
+    @property
+    def value(self) -> Union[int, float]:
+        return self._value * self._scaler()  # type: ignore
