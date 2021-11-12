@@ -10,6 +10,7 @@ python = "^3.9"
 requests = "^2.26.0"
 SLPP = "^1.2.3"
 parse = "^1.19.0"
+mypy = "^0.910"
 
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"
