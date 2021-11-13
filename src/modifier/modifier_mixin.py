@@ -3,7 +3,7 @@ from typing import Callable, Iterable, Union
 
 
 class ModifierMixin:
-    def __init__(self, identifier: str, regexp: str, fmt: str, *args, **kwargs):
+    def __init__(self, identifier: str, regexp: str, fmt: str, targets, kind, *args, **kwargs):
         self._identifier: str = identifier
         self._regexp: str = regexp
         self._fmt: str = fmt
