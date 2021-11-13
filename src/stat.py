@@ -11,7 +11,7 @@ class Stat(str, Enum):
     def __init__(self, value: str, *args, **kwargs):
         if any(value == other.value for other in self.__class__):
             raise RuntimeError("member already exists")
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # type: ignore
 
     Strength = "strength"
     Dexterity = "dexterity"
@@ -26,6 +26,5 @@ class Stat(str, Enum):
     SpellBaseFireDamageMaximumLife = "spell_base_fire_damage_%_maximum_life"
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(Stat.Strength)

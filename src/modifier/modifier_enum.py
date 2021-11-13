@@ -1,5 +1,7 @@
 from enum import Enum
+
 from src.stat import Stat, StatType
+
 """ classification and definition of all modifiers """
 
 _INT = r"[-+]?[0-9]*"
@@ -12,35 +14,35 @@ class ValueModifierEnum(Enum):
         regexp=f"^{_INT}% more Spell Damage$",
         fmt="{value:d}% more Spell Damage",
         targets=[Stat.SpellDamage],
-        kind=StatType.More
+        kind=StatType.More,
     )
     AdditionalStrength = dict(
         identifier="additional_strength",
         regexp=f"^\+{_INT} to Strength$",
         fmt="+{value:d} to Strength",
         targets=[Stat.Strength],
-        kind=StatType.Base
+        kind=StatType.Base,
     )
     IncreasedStrength = dict(
         identifier="increased_strength",
         regexp=f"^{_INT}% increased Strength$",
         fmt="{value:d}% increased Strength",
         targets=[Stat.Strength],
-        kind=StatType.Increased
+        kind=StatType.Increased,
     )
     MoreStrength = dict(
         identifier="more_strength",
         regexp=f"^{_INT}% more Strength$",
         fmt="{value:d}% more Strength",
         targets=[Stat.Strength],
-        kind=StatType.More
+        kind=StatType.More,
     )
     IncreasedSpellDamage = dict(
         identifier="increased_spell_damage",
         regexp=f"^{_INT}% increased Spell Damage$",
         fmt="{value:d}% increased Spell Damage",
         targets=[Stat.SpellDamage],
-        kind=StatType.Increased
+        kind=StatType.Increased,
     )
 
 
