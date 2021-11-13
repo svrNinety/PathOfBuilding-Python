@@ -4,7 +4,9 @@ from typing import Callable, Iterable, Union
 
 
 class ModifierMixin:
-    def __init__(self, identifier: str, regexp: str, fmt: str, targets, kind, *args, **kwargs):
+    def __init__(
+        self, identifier: str, regexp: str, fmt: str, targets, kind, *args, **kwargs
+    ):
         self._identifier: str = identifier
         self._regexp: str = regexp
         self._fmt: str = fmt
@@ -105,7 +107,9 @@ class ValueModifierMixin:
         self._value -= other._value
         return self
 
-    def __imul__(self, other: Union[ValueModifierMixin, int, float]) -> ValueModifierMixin:
+    def __imul__(
+        self, other: Union[ValueModifierMixin, int, float]
+    ) -> ValueModifierMixin:
         if isinstance(other, ValueModifierMixin):
             assert self == other, f"modifier mismatch"
             other = other._value

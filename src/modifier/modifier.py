@@ -24,7 +24,9 @@ class ValueModifier(ModifierMixin, ValueModifierMixin):
     pass
 
 
-class ConditionalValueModifier(ModifierMixin, ValueModifierMixin, ConditionalModifierMixin):
+class ConditionalValueModifier(
+    ModifierMixin, ValueModifierMixin, ConditionalModifierMixin
+):
     pass
 
 
@@ -32,7 +34,9 @@ class DynamicValueModifier(ModifierMixin, DynamicValueModifierMixin):
     pass
 
 
-def _infer_modifier_type_from_text(modifier_text: str) -> tuple[Type[ModifierMixin], Type[Enum], Any]:
+def _infer_modifier_type_from_text(
+    modifier_text: str,
+) -> tuple[Type[ModifierMixin], Type[Enum], Any]:
     for _cls, _enum in zip(
         [ValueModifier, DynamicValueModifier, ConditionalValueModifier],
         [ValueModifierEnum, DynamicValueModifierEnum, ConditionalValueModifierEnum],
@@ -45,7 +49,9 @@ def _infer_modifier_type_from_text(modifier_text: str) -> tuple[Type[ModifierMix
 
 
 def _instantiate_modifier_instance_from_text(modifier_text: str) -> ModifierMixin:
-    cls, modifier_type, type_requirements = _infer_modifier_type_from_text(modifier_text=modifier_text)
+    cls, modifier_type, type_requirements = _infer_modifier_type_from_text(
+        modifier_text=modifier_text
+    )
     params = parse.parse(format=type_requirements["fmt"], string=modifier_text).named
     kwargs = params | type_requirements
     return cls(**kwargs)
